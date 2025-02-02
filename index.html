@@ -190,9 +190,12 @@
         function showSlide(index) {
             slides.forEach(slide => slide.classList.remove("active"));
             slides[index].classList.add("active");
-            document.getElementById("prev-btn").disabled = index === 0;
-            document.getElementById("next-btn").disabled = index === slides.length - 1;
+
+            // Hide the 'Previous' button on the first slide, and 'Next' on the last slide
+            document.getElementById("prev-btn").style.display = index === 0 ? "none" : "inline-block";
+            document.getElementById("next-btn").style.display = index === slides.length - 1 ? "none" : "inline-block";
         }
+
 
         function nextSlide() {
             if (currentSlide < slides.length - 1) {
