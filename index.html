@@ -120,6 +120,9 @@
         #dark-mode-toggle:hover {
             background: #0056b3;
         }
+        .hidden {
+            display: none !important;
+        }
     </style>
     <!-- Cloudflare Web Analytics -->
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4c58411340ba4aa3ba0407daf0e00ffd"}'></script>
@@ -192,11 +195,10 @@
             slides[index].classList.add("active");
 
             // Hide the 'Previous' button on the first slide, and 'Next' on the last slide
-            document.getElementById("prev-btn").style.display = index === 0 ? "none" : "inline-block";
-            document.getElementById("next-btn").style.display = index === slides.length - 1 ? "none" : "inline-block";
+            document.getElementById("prev-btn").classList.toggle("hidden", index === 0);
+            document.getElementById("next-btn").classList.toggle("hidden", index === slides.length - 1);
         }
-
-
+        
         function nextSlide() {
             if (currentSlide < slides.length - 1) {
                 currentSlide++;
