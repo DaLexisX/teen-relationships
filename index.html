@@ -236,14 +236,12 @@
             button.textContent = isDarkMode ? "Light Mode" : "Dark Mode";
         }
 
-
         function applySavedDarkMode() {
             const darkModeSetting = localStorage.getItem("darkMode");
-            const isDarkMode = darkModeSetting === "enabled";
-            if (isDarkMode) {
+            if (darkModeSetting === "enabled") {
                 document.body.classList.add("dark-mode");
             }
-            updateDarkModeButtonText(isDarkMode); // Update button text on page load
+            updateDarkModeButtonText(document.body.classList.contains("dark-mode"));
         }
 
         updatePageViews();  // Call the function to update page views
