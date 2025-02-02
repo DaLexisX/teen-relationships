@@ -123,10 +123,10 @@
         <div class="slide">Wearing you down: Asking over and over until you say yes.</div>
         <div class="slide">Making you feel bad for saying no: Sulking, anger, or acting distant.</div>
         <div class="slide">Comparing you to others: “Everyone else is doing it.”</div>
-        <div class="slide">Making you feel like you’ll lose them: “If you won’t, maybe we’re not right for each other.”</div>
-        <div class="slide">🗣️ (Discuss) “If you had said no, do you think they would have been fine with it?”</div>
-        <div class="slide">🗣️ (Discuss) “Would you feel comfortable stopping next time if you changed your mind?”</div>
-        <div class="slide">🚩 If someone reacts badly to a ‘no,’ that’s a red flag.</div>
+    </div>
+    <div class="buttons">
+        <button id="prev-btn" onclick="prevSlide()" disabled>Previous</button>
+        <button id="next-btn" onclick="nextSlide()">Next</button>
     </div>
     <script>
         function toggleDarkMode() {
@@ -150,6 +150,8 @@
         function showSlide(index) {
             slides.forEach(slide => slide.classList.remove("active"));
             slides[index].classList.add("active");
+            document.getElementById("prev-btn").disabled = index === 0;
+            document.getElementById("next-btn").disabled = index === slides.length - 1;
         }
 
         function nextSlide() {
