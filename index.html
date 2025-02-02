@@ -172,69 +172,73 @@
     </div>
 
     <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            const isDarkMode = document.body.classList.contains("dark-mode");
-            localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+        document.addEventListener("DOMContentLoaded", function() {
+        applySavedDarkMode(); // Ensure dark mode is applied based on previous choice
+        showSlide(currentSlide); // Show the first slide initially
+    });
+
+    const slides = document.querySelectorAll(".slide");
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove("active"));
+        slides[index].classList.add("active");
+
+        // Hide the 'Previous' button on the first slide, and 'Next' on the last slide
+        document.getElementById("prev-btn").classList.toggle("hidden", index === 0);
+        document.getElementById("next-btn").classList.toggle("hidden", index === slides.length - 1);
+    }
+
+    function nextSlide() {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
         }
+    }
 
-        function applySavedDarkMode() {
-            const darkModeSetting = localStorage.getItem("darkMode");
-            if (darkModeSetting === "enabled") {
-                document.body.classList.add("dark-mode");
-            }
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
         }
+    }
 
-        document.addEventListener("DOMContentLoaded", applySavedDarkMode);
-
-        const slides = document.querySelectorAll(".slide");
-        let currentSlide = 0;
-
-        function showSlide(index) {
-            slides.forEach(slide => slide.classList.remove("active"));
-            slides[index].classList.add("active");
-
-            // Hide the 'Previous' button on the first slide, and 'Next' on the last slide
-            document.getElementById("prev-btn").classList.toggle("hidden", index === 0);
-            document.getElementById("next-btn").classList.toggle("hidden", index === slides.length - 1);
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "ArrowRight" || event.key === " ") {
+            nextSlide();
+        } else if (event.key === "ArrowLeft") {
+            prevSlide();
         }
-  
-        function nextSlide() {
-            if (currentSlide < slides.length - 1) {
-                currentSlide++;
-                showSlide(currentSlide);
-            }
-        }
+    });
 
-        function prevSlide() {
-            if (currentSlide > 0) {
-                currentSlide--;
-                showSlide(currentSlide);
-            }
-        }
-
-        document.addEventListener("keydown", function(event) {
-            if (event.key === "ArrowRight" || event.key === " ") {
-                nextSlide();
-            } else if (event.key === "ArrowLeft") {
-                prevSlide();
-            }
+    async function updatePageViews() {
+        const response = await fetch("https://api.jsonbin.io/v3/b/679f57afad19ca34f8f87afa", {
+            headers: { "X-Master-Key": "$2a$10$Cq/XNsUqX1aJK0orOYuhR.eRLW5ExEH5y2MdEGfnscBcLeorzhG1W" }
         });
+        const data = await response.json();
+        data.record.views += 1;
+        document.getElementById("view-counter").innerText = `Views: ${data.record.views}`;
+        await fetch("https://api.jsonbin.io/v3/b/679f57afad19ca34f8f87afa", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "X-Master-Key": "$2a$10$Cq/XNsUqX1aJK0orOYuhR.eRLW5ExEH5y2MdEGfnscBcLeorzhG1W" },
+            body: JSON.stringify(data.record)
+        });
+    }
 
-        async function updatePageViews() {
-            const response = await fetch("https://api.jsonbin.io/v3/b/679f57afad19ca34f8f87afa", {
-                headers: { "X-Master-Key": "$2a$10$Cq/XNsUqX1aJK0orOYuhR.eRLW5ExEH5y2MdEGfnscBcLeorzhG1W" }
-            });
-            const data = await response.json();
-            data.record.views += 1;
-            document.getElementById("view-counter").innerText = `Views: ${data.record.views}`;
-            await fetch("https://api.jsonbin.io/v3/b/679f57afad19ca34f8f87afa", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json", "X-Master-Key": "$2a$10$Cq/XNsUqX1aJK0orOYuhR.eRLW5ExEH5y2MdEGfnscBcLeorzhG1W" },
-                body: JSON.stringify(data.record)
-            });
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+        const isDarkMode = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+    }
+
+    function applySavedDarkMode() {
+        const darkModeSetting = localStorage.getItem("darkMode");
+        if (darkModeSetting === "enabled") {
+            document.body.classList.add("dark-mode");
         }
-        updatePageViews();
+    }
+
+    updatePageViews();
     </script>
 </body>
 </html>
