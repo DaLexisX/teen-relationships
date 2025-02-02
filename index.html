@@ -226,16 +226,24 @@
         }
 
         function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            const isDarkMode = document.body.classList.contains("dark-mode");
+            const isDarkMode = document.body.classList.toggle("dark-mode");
             localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+            updateDarkModeButtonText(isDarkMode);
         }
+
+        function updateDarkModeButtonText(isDarkMode) {
+            const button = document.getElementById("dark-mode-toggle");
+            button.textContent = isDarkMode ? "Light Mode" : "Dark Mode";
+        }
+
 
         function applySavedDarkMode() {
             const darkModeSetting = localStorage.getItem("darkMode");
-            if (darkModeSetting === "enabled") {
+            const isDarkMode = darkModeSetting === "enabled";
+            if (isDarkMode) {
                 document.body.classList.add("dark-mode");
             }
+            updateDarkModeButtonText(isDarkMode); // Update button text on page load
         }
 
         updatePageViews();  // Call the function to update page views
